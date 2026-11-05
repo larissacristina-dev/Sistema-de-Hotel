@@ -1,0 +1,382 @@
+HOTEL GRAND HORIZON
+
+============================================================
+APRESENTAÇÃO
+============================================================
+
+Tema: Hotelaria, hospitalidade e gestão de acomodações.
+
+O Hotel Grand Horizon é um projeto acadêmico que combina um site institucional
+com um sistema operacional para demonstrar a rotina de um hotel. O site apresenta
+o hotel fictício, seus espaços e serviços. O sistema permite acompanhar quartos,
+hóspedes, consumos, convênios e operações de check-in e checkout.
+
+O projeto é composto por páginas em HTML, CSS e JavaScript, uma API em Python
+com Flask e um banco de dados MySQL. Os dados operacionais são consultados e
+salvos no MySQL por meio da API. Para usar o sistema em mais de um computador,
+mantenha a API e o banco em um computador servidor e acesse o endereço desse
+servidor nos demais computadores da mesma rede.
+
+Integrantes:
+- Larissa Cristina — Modelagem de Dados
+- João Vitor Souza — QA e Engenharia de Requisitos
+- Gustavo Augusto — Front-end
+
+Objetivo:
+Apresentar a experiência de hospedagem do Grand Horizon e demonstrar como
+processos de recepção e gestão podem ser organizados com uma interface web,
+uma API e um banco de dados relacional.
+
+Público-alvo:
+Visitantes interessados em turismo e hospedagem, estudantes que pesquisam
+hotelaria e pessoas que desejam conhecer um exemplo de sistema de gestão hoteleira.
+
+============================================================
+FUNCIONALIDADES DO SISTEMA
+============================================================
+
+- Painel com ocupação, disponibilidade e resumo dos quartos sincronizados com o
+  banco de dados.
+- Cadastro e consulta de hóspedes e registro de check-in.
+- A base atual contém 50 quartos. Seus estados incluem Disponível, Ocupado,
+  Em Limpeza e Manutenção.
+- Proteção contra liberar ou alterar indevidamente um quarto com hospedagem ativa;
+  o checkout do hóspede deve ser concluído primeiro.
+- Registro e consulta de consumos associados a quartos.
+- Solicitações de segunda chave vinculadas à hospedagem.
+- Cadastro, edição, ativação, desativação, arquivamento e restauração de convênios.
+  Convênios arquivados deixam de ser oferecidos em novos check-ins e podem ser
+  restaurados.
+- Checkout com conferência de diárias, consumos, descontos e total da hospedagem.
+- Páginas institucionais com menu responsivo, filtros em Explore, perguntas
+  frequentes e formulário de contato demonstrativo.
+- Recursos de acessibilidade no site e nas telas operacionais, incluindo
+  preferências visuais salvas no navegador.
+
+Observação:
+O formulário da página Contato apenas valida os campos e mostra uma confirmação.
+Ele não envia nem armazena mensagens.
+
+============================================================
+ARQUITETURA DO PROJETO
+============================================================
+
+Frontend:
+- HTML: estrutura e conteúdo das páginas.
+- CSS: apresentação visual e adaptação a diferentes tamanhos de tela.
+- JavaScript: navegação, filtros, acessibilidade e interações operacionais.
+
+API e banco de dados:
+- Python e Flask: servidor web, entrega das páginas e endpoints da API.
+- MySQL: armazenamento persistente de quartos, hóspedes, convênios, consumos,
+  solicitações de chaves e dados de checkout.
+- mysql-connector-python: conexão entre Python e MySQL.
+- python-dotenv: leitura das configurações locais do arquivo .env.
+
+Ao iniciar, a aplicação verifica e inicializa as tabelas necessárias no MySQL.
+Em um banco sem quartos, essa inicialização cria cinco quartos iniciais. Para
+preparar o catálogo completo de 50 quartos e os hóspedes de demonstração, use
+seed_demo_data.py somente em uma instalação de demonstração. Não execute esse
+script indiscriminadamente em uma base operacional: ele pode inserir hóspedes
+ativos de demonstração nos quartos previstos para estarem ocupados.
+
+As telas operacionais dependem da API Flask e do MySQL para carregar e gravar os
+dados. Se a conexão com o banco falhar, o sistema informa o erro e não aplica a
+alteração operacional como se tivesse sido salva. Abrir as páginas por file://
+não conecta ao banco. O armazenamento local do navegador é usado para algumas
+preferências e dados auxiliares da interface; ele não substitui nem sincroniza
+os registros operacionais do MySQL entre computadores.
+
+============================================================
+ARQUIVOS E PASTAS PRINCIPAIS
+============================================================
+
+- index.html, sobre.html, conteudo.html, explore.html e contato.html: páginas
+  institucionais.
+- dashboard/index.html: painel operacional.
+- cadastro-check-in/index.html: cadastro e consulta de check-in.
+- gestao-de-quartos/index.html: gestão e atualização dos quartos.
+- lancamento-de-consumos/index.html: registro de consumos.
+- sobre-o-sistema/index.html: informações e especificações do sistema.
+- css/ e js/: estilos e scripts do site institucional.
+- static/: scripts e estilos do sistema operacional.
+- img/: imagens utilizadas nas páginas.
+- app.py: servidor Flask, API e entrega das páginas.
+- database.py: conexão, criação e migração das tabelas MySQL.
+- seed_demo_data.py: preparação opcional de dados de demonstração.
+- requirements.txt: dependências Python.
+- .env.example: exemplo das configurações necessárias para a conexão.
+- start_api.bat: atalho do Windows que instala as dependências e inicia a API.
+
+============================================================
+COMO EXECUTAR NO COMPUTADOR SERVIDOR
+============================================================
+
+Pré-requisitos:
+- Windows com Python 3 instalado.
+- MySQL Server instalado e em execução.
+- Acesso à pasta completa do projeto.
+- Conexão de rede privada, caso outros computadores acessem o sistema.
+
+1. Abra a pasta do projeto no Explorador de Arquivos. A pasta correta é aquela
+   que contém app.py, database.py, requirements.txt e .env.example.
+
+2. Crie o arquivo de configuração:
+   - Copie .env.example para um novo arquivo chamado .env.
+   - Edite o .env com os dados do MySQL instalado neste computador.
+   - Exemplo:
+       DB_HOST=127.0.0.1
+       DB_USER=root
+       DB_PASSWORD=sua_senha_mysql
+       DB_NAME=hotel_grand_horizon
+       FLASK_HOST=0.0.0.0
+       FLASK_PORT=5000
+   - DB_HOST=127.0.0.1 é apropriado quando MySQL e Flask estão neste mesmo
+     computador. Não use literalmente "sua_senha_mysql": substitua pela senha
+     configurada no MySQL.
+   - A conta MySQL configurada precisa conseguir criar o banco indicado e
+     criar/alterar as tabelas durante a inicialização e as migrações.
+
+3. Inicie o MySQL Server pelo aplicativo de serviços do Windows ou pelo
+   MySQL Workbench. Confirme que o servidor está ativo.
+
+4. Instale as dependências Python uma vez:
+   - Abra o PowerShell na pasta do projeto.
+   - Execute: py -m pip install -r requirements.txt
+   - Se o comando py não existir, tente: python -m pip install -r requirements.txt
+
+5. Inicie a aplicação:
+   - No mesmo PowerShell, execute: py app.py
+   - Alternativamente, dê duplo clique em start_api.bat.
+   - Mantenha essa janela aberta enquanto o sistema estiver em uso. Ao primeiro
+     início, a aplicação cria ou atualiza as tabelas no banco configurado.
+
+6. No próprio computador servidor, abra no navegador:
+   http://127.0.0.1:5000/
+
+7. Para conferir a conexão com o banco, abra:
+   http://127.0.0.1:5000/api/health
+   Uma resposta com status "ok" e MySQL "online" indica que a API conseguiu
+   conectar ao banco configurado.
+
+8. Para conferir os quartos disponíveis pela API, abra:
+   http://127.0.0.1:5000/api/quartos
+
+Para preparar os 50 quartos e hóspedes de demonstração em uma instalação de
+demonstração:
+   - Inicie o Flask uma vez para criar as tabelas e os cinco quartos iniciais.
+   - Feche o servidor Flask com Ctrl+C.
+   - Execute, uma única vez, na pasta do projeto: py seed_demo_data.py
+   - Inicie novamente: py app.py
+Esse script acrescenta os quartos de demonstração que faltam sem excluir os
+existentes, e também pode criar hóspedes ativos de demonstração. Não o execute
+em uma base operacional sem antes revisar o script e fazer um backup.
+
+============================================================
+COMO ABRIR O SISTEMA EM OUTRO COMPUTADOR
+============================================================
+
+Modo recomendado: o MySQL e o Flask ficam em um computador servidor. Os demais
+computadores usam apenas um navegador; não precisam instalar Python nem MySQL.
+Todos os computadores devem estar conectados à mesma rede privada (por exemplo,
+à mesma rede local da escola ou da empresa).
+
+Limite importante: o sistema não possui tela de login ou autenticação de
+usuários e o acesso é feito por HTTP, sem HTTPS. Use somente em uma rede privada
+confiável, com dispositivos conhecidos. Este passo a passo não transforma o
+servidor de desenvolvimento em um serviço seguro para produção ou para acesso
+pela internet.
+
+NO COMPUTADOR SERVIDOR:
+
+1. Siga os passos da seção "Como executar no computador servidor": configure o
+   .env, inicie o MySQL, instale os requisitos e execute py app.py.
+
+2. Confirme no .env que o Flask escuta na rede:
+       FLASK_HOST=0.0.0.0
+       FLASK_PORT=5000
+   O app.py usa esses valores por padrão. Reinicie o Flask se alterar o arquivo.
+
+3. Descubra o endereço IP local do servidor:
+   - Abra o Prompt de Comando ou PowerShell e execute: ipconfig
+   - Na placa conectada à rede que será compartilhada, procure "Endereço IPv4",
+     por exemplo 192.168.1.25.
+   - O endereço pode mudar quando o roteador reinicia. Se isso acontecer,
+     consulte o novo endereço e atualize o atalho nos outros computadores.
+
+4. Libere a porta 5000 no Firewall do Windows somente para redes privadas:
+   - Abra "Firewall do Windows Defender com Segurança Avançada".
+   - Selecione "Regras de Entrada" e depois "Nova Regra".
+   - Escolha "Porta", TCP, porta local específica 5000.
+   - Escolha "Permitir a conexão".
+   - Marque apenas o perfil "Privado"; não habilite para redes públicas.
+   - Dê um nome identificável, como "Hotel Grand Horizon - Flask".
+   - Se a política da escola ou empresa bloquear essa alteração, solicite ajuda
+     ao responsável pela rede.
+
+5. Mantenha ligados o computador servidor, o MySQL e a janela do Flask. Se
+   qualquer um deles parar, os outros computadores não conseguirão usar o sistema.
+
+EM CADA OUTRO COMPUTADOR:
+
+6. Conecte-o à mesma rede privada do computador servidor.
+
+7. Abra o navegador e digite o endereço usando o IPv4 encontrado no passo 3.
+   Exemplo:
+       http://192.168.1.25:5000/
+   Substitua 192.168.1.25 pelo endereço real do servidor. Não use 127.0.0.1
+   nos computadores clientes: esse endereço aponta para o próprio computador,
+   não para o servidor.
+
+8. Abra a tela "Acessar sistema" e faça uma operação de consulta. Os dados devem
+   ser compartilhados porque os navegadores acessam a mesma API e o mesmo MySQL.
+   Para conferir a conexão a partir do computador cliente, abra também
+       http://192.168.1.25:5000/api/health
+   usando o IPv4 real do servidor. A resposta deve indicar status "ok" e MySQL
+   "online".
+
+9. Se a página não abrir, confirme nesta ordem:
+   - O computador servidor está ligado e conectado à mesma rede.
+   - No servidor, http://127.0.0.1:5000/api/health mostra MySQL online; no cliente,
+     teste http://IP-DO-SERVIDOR:5000/api/health.
+   - O Flask continua ativo na janela do terminal.
+   - O endereço IPv4 e a porta 5000 foram digitados corretamente.
+   - A regra de entrada do Firewall está ativa para rede privada.
+   - Nenhum outro programa está ocupando a porta 5000.
+
+SEGURANÇA E DADOS:
+- Não exponha a porta 5000 ou a porta 3306 diretamente à internet.
+- Não use este servidor sem autenticação/HTTPS em uma rede pública ou com
+  dispositivos não confiáveis.
+- No modo recomendado, os computadores clientes acessam somente a porta 5000
+  do Flask. O MySQL permanece no servidor e não precisa ser liberado para a rede.
+- Troque a senha padrão do MySQL e use no .env uma conta adequada ao ambiente.
+  O .env contém credenciais: não o envie em grupos, não o publique e não o
+  compartilhe junto com o código sem proteção.
+- Faça cópias de segurança regulares do banco pelo MySQL Workbench ou por uma
+  ferramenta administrativa do MySQL antes de alterações importantes.
+
+TRANSFERIR O SISTEMA E OS DADOS PARA OUTRO COMPUTADOR:
+
+1. No computador antigo, faça um backup do schema hotel_grand_horizon pelo
+   MySQL Workbench: "Server" > "Data Export", selecione o schema, marque a
+   exportação de estrutura e dados e inicie a exportação para um arquivo.
+2. Copie a pasta completa do projeto e o arquivo de backup para o computador
+   novo. Transfira o .env separadamente e com segurança; não o publique.
+3. Instale Python 3 e MySQL Server no computador novo.
+4. No MySQL Workbench do computador novo, use "Server" > "Data Import", escolha
+   o arquivo de backup, importe-o e confirme o schema hotel_grand_horizon.
+   Antes de retomar o uso, confira se a importação terminou sem erro e se as
+   tabelas e registros esperados aparecem no schema.
+5. Configure o .env do computador novo. Se Flask e MySQL estiverem na mesma
+   máquina, use DB_HOST=127.0.0.1 e informe o usuário e a senha válidos naquele
+   MySQL. O usuário usado pela aplicação precisa ter as permissões que a
+   inicialização e as migrações atuais exigem: criação do schema e criação/
+   alteração das tabelas, além das operações de leitura e gravação.
+6. Instale os requisitos com py -m pip install -r requirements.txt e inicie
+   py app.py.
+7. Verifique http://127.0.0.1:5000/api/health e depois acesse o sistema pelo
+   navegador. Só após conferir a importação e os registros retome o uso normal.
+
+Se apenas outro computador for acessar o sistema, não transfira nem copie o
+banco: siga o modo recomendado, mantendo Flask e MySQL no servidor original.
+
+============================================================
+PÁGINAS DO PROJETO
+============================================================
+
+Páginas institucionais:
+- index.html: apresentação e atalhos para o conteúdo e o sistema.
+- sobre.html: objetivo, público-alvo e equipe.
+- conteudo.html: conteúdo sobre hospedagem, serviços e operação.
+- explore.html: experiências com pesquisa e filtro por categoria.
+- contato.html: formulário demonstrativo e perguntas frequentes.
+
+Telas operacionais:
+- dashboard/index.html: painel de operação, ocupação e avisos.
+- cadastro-check-in/index.html: registro e consulta de hóspedes.
+- gestao-de-quartos/index.html: quartos e atualização de status.
+- lancamento-de-consumos/index.html: produtos e registro de consumos.
+- sobre-o-sistema/index.html: informações e especificações do sistema.
+
+============================================================
+ACESSIBILIDADE E NAVEGAÇÃO
+============================================================
+
+- O menu se adapta a telas estreitas; Escape fecha o menu e devolve o foco ao botão.
+- O controle de acessibilidade permite ajustar preferências visuais, que ficam
+  salvas no navegador.
+- O link "Pular para o conteúdo" e os indicadores de foco auxiliam a navegação
+  por teclado.
+- A página Explore combina pesquisa textual e filtro de categoria e permite
+  limpar os filtros.
+- As perguntas frequentes podem ser abertas e fechadas com mouse ou teclado.
+- O formulário de contato verifica campos obrigatórios e o formato do e-mail,
+  mas não envia nem armazena mensagens.
+
+============================================================
+APRENDIZADO E DESENVOLVIMENTO
+============================================================
+
+O projeto reuniu desenvolvimento de interface, acessibilidade, responsividade,
+API e persistência de dados. A integração entre Flask e MySQL permite que as
+operações principais sejam compartilhadas entre os computadores que acessam o
+mesmo servidor. A organização em páginas e telas operacionais facilita a
+manutenção e a evolução do sistema.
+
+============================================================
+FUTURAS MELHORIAS
+============================================================
+
+As melhorias abaixo não estão implementadas nesta versão e podem ser consideradas
+em uma etapa futura:
+
+- Autenticação de usuários com login e logout, proteção das páginas e da API e
+  armazenamento de senhas com hash seguro (nunca em texto puro).
+- Perfis e permissões, por exemplo, administração e operação, definindo quais
+  áreas e ações cada usuário pode acessar.
+- HTTPS para proteger os dados transmitidos entre os navegadores e o servidor.
+  A configuração depende de onde o sistema será hospedado e requer certificado
+  digital e configuração adequada do servidor.
+- Reforço geral de segurança antes de usar dados reais ou permitir acesso por
+  redes públicas ou pela internet, incluindo gestão segura de segredos, backups
+  testados e restrição de acesso ao banco de dados.
+
+Login e HTTPS resolvem necessidades diferentes e não substituem um ao outro:
+o login controla o acesso; o HTTPS protege a comunicação. Até que essas melhorias
+sejam implementadas e verificadas, use o sistema somente em uma rede privada
+confiável, conforme as orientações de segurança deste documento.
+
+============================================================
+CRÉDITOS E FONTES
+============================================================
+
+Conteúdo textual elaborado pela equipe para fins acadêmicos, com base em
+conhecimentos gerais sobre hotelaria, hospitalidade e gestão de acomodações.
+
+IMAGENS:
+As imagens utilizadas no projeto estão armazenadas localmente na pasta img/.
+A identificação individual deve seguir o catálogo do projeto e as condições de
+uso de cada fonte:
+
+logo.png
+Utilização: identidade visual do Hotel Grand Horizon.
+Origem/autoria: confirmar no arquivo original ou no registro de aquisição.
+
+lobby_hotel_hd.webp
+Utilização: imagem de destaque da recepção do hotel.
+Origem/autoria: confirmar no arquivo original ou no registro de aquisição.
+
+quarto_standard_hd.webp
+Utilização: representação de acomodação Standard.
+Origem/autoria: confirmar no arquivo original ou no registro de aquisição.
+
+suite_master_hd.webp
+Utilização: representação da suíte Master.
+Origem/autoria: confirmar no arquivo original ou no registro de aquisição.
+
+Demais imagens:
+Consultar a identificação individual de cada arquivo e respeitar a autoria e as
+condições de utilização da respectiva fonte.
+
+As imagens e demais materiais são utilizados no contexto acadêmico e ilustrativo.
