@@ -1,0 +1,21 @@
+# Environment credentials
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local logs and database exports
+*.log
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.sqlite3
+
+# Local validation output
+.tsupgrader/runtime-validation/standalone-result.json
