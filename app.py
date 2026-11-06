@@ -96,3 +96,47 @@ def convenios():
             "(arquivado_em IS NOT NULL) AS arquivado "
             "FROM convenios ORDER BY razao_social"
         )
+ records = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return jsonify(records)
+
+    dados = request.get_json(force=True, silent=True) or {}
+    razao_social = str(dados.get("razao_social") or "").strip()
+    cnpj = normalize_cnpj(dados.get("cnpj"))
+    if not razao_social or len(razao_social) > 150:
+        return jsonify({"erro": "Informe a razão social (até 150 caracteres)."}), 400
+    if len(cnpj) != 14:
+        return jsonify({"erro": "O CNPJ deve conter 14 números."}), 400
+    try:
+        desconto = parse_discount_rate(dados.get("desconto_percentual"))
+    except ValueError as exc:
+        return jsonify({"erro": str(exc)}), 400
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO convenios (razao_social, cnpj, desconto_percentual) "
+            "VALUES (%s, %s, %s)",
+            (razao_social, cnpj, str(desconto)),
+        )
+        conn.commit()
+        convenio_id = cursor.lastrowid
+    except Exception as exc:
+        conn.rollback()
+        if getattr(exc, "errno", None) == 1062:
+            return jsonify({"erro": "Já existe um convênio cadastrado com este CNPJ."}), 409
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+    return jsonify({
+        "id": convenio_id,
+        "razao_social": razao_social,
+        "cnpj": cnpj,
+        "desconto_percentual": float(desconto),
+        "ativo": 1,
+        "arquivado": False,
+    }), 201
