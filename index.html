@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -9,17 +10,21 @@
   <script src="js/script.js" defer></script>
 </head>
 <body>
+
+  <!-- Link de acessibilidade para acessar diretamente o conteúdo principal. -->
   <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
-  
-    <!-- Cabeçalho principal do Hotel Grand Horizon -->
+
+  <!-- Cabeçalho com identidade visual e navegação principal do hotel. -->
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="Hotel Grand Horizon - página inicial">
       <img src="img/logo.png" alt="Emblema do Hotel Grand Horizon">
       <span><strong>Grand Horizon</strong><small>Hospitalidade e gestão</small></span>
     </a>
+
     <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false">
       <span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Abrir menu</span>
     </button>
+
     <nav class="site-nav" id="primary-navigation" aria-label="Navegação principal">
       <a href="index.html" aria-current="page">Início</a>
       <a href="sobre.html">Sobre</a>
@@ -29,3 +34,79 @@
       <a class="nav-cta" href="dashboard/index.html">Acessar sistema</a>
     </nav>
   </header>
+
+  <!-- Conteúdo principal da página inicial. -->
+  <main id="main-content" tabindex="-1">
+
+    <!-- Seção de destaque com apresentação do hotel, links e imagem principal. -->
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Projeto de hospitalidade</p>
+        <h1>Uma experiência de hospedagem pensada em cada detalhe.</h1>
+        <p class="lead">Conheça o Grand Horizon: um hotel fictício que reúne acolhimento, conforto e organização para tornar cada estadia especial.</p>
+        <div class="button-row">
+          <a class="button button-primary" href="explore.html">Explore o hotel</a>
+          <a class="button button-secondary" href="dashboard/index.html">Conheça o sistema</a>
+        </div>
+      </div>
+      <img class="hero-image" src="img/lobby_hotel_hd.webp" alt="Lobby elegante e iluminado do Hotel Grand Horizon">
+    </section>
+
+    <!-- Seção de apresentação das principais áreas e funcionalidades do projeto. -->
+    <section class="section-block" aria-labelledby="discover-title">
+      <div class="section-heading">
+        <p class="eyebrow">Descubra o projeto</p>
+        <h2 id="discover-title">Hospitalidade que funciona de ponta a ponta</h2>
+        <p>Da chegada do hóspede à organização dos quartos, cada parte da experiência tem seu espaço.</p>
+      </div>
+      <div class="feature-grid">
+
+        <!-- Cartão de apresentação do hotel. -->
+        <article class="feature-card">
+          <span class="card-number">01</span>
+          <h3>Sobre o hotel</h3>
+          <p>Entenda a proposta, o público e a equipe que idealizou este projeto.</p>
+          <a class="text-link" href="sobre.html">Conheça o projeto <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- Cartão de apresentação dos serviços e espaços. -->
+        <article class="feature-card">
+          <span class="card-number">02</span>
+          <h3>Serviços e espaços</h3>
+          <p>Veja como hospedagem, atendimento e operação se conectam.</p>
+          <a class="text-link" href="conteudo.html">Leia sobre o tema <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- Cartão de acesso à experiência guiada do hotel. -->
+        <article class="feature-card">
+          <span class="card-number">03</span>
+          <h3>Uma visita guiada</h3>
+          <p>Explore acomodações, gastronomia, tecnologia e outros destaques.</p>
+          <a class="text-link" href="explore.html">Ver experiências <span aria-hidden="true">→</span></a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Banner de acesso ao sistema de gerenciamento do hotel. -->
+    <section class="system-banner">
+      <div>
+        <p class="eyebrow">Operação do hotel</p>
+        <h2>Veja como a equipe organiza a experiência.</h2>
+        <p>O sistema local reúne painel, check-in, gestão de quartos e lançamento de consumos.</p>
+      </div>
+      <a class="button button-light" href="dashboard/index.html">Abrir painel do hotel</a>
+    </section>
+
+  </main>
+
+  <!-- Rodapé com identificação do projeto e informações complementares. -->
+  <footer class="site-footer">
+    <div><strong>Hotel Grand Horizon</strong><span>Projeto acadêmico de hospitalidade e gestão hoteleira.</span></div>
+    <div class="footer-meta"><span>Textos autorais do projeto.</span><span>Imagens: acervo visual local fornecido com o projeto, na pasta img.</span></div>
+  </footer>
+
+  <!-- Script complementar de recursos de acessibilidade. -->
+  <script src="static/accessibility.js"></script>
+</body>
+</html>
